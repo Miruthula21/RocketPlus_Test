@@ -1,0 +1,8 @@
+[
+  {
+    "step": 1,
+    "name": "Open RocketPlus Login Page",
+    "status": "FAIL",
+    "reason": "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://rocketplus.tradeplusonline.com/#!/app\", waiting until \"load\"\n"
+  }
+]
