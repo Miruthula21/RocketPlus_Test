@@ -19,10 +19,10 @@ def send_report(status, video_path, log_lines, step_results, duration):
 
             step_rows += f"""
             <tr style="background:{s_color}">
-                <td><b>{step.get('step','')}</b></td>
-                <td>{s_icon} {step.get('status','')}</td>
-                <td>{step.get('name','')}</td>
-                <td>{step.get('reason','')}</td>
+                <td style="padding:10px;border:1px solid #d1d5db;font-weight:700">{step.get('step','')}</td>
+                <td style="padding:10px;border:1px solid #d1d5db;color:{color};font-weight:700">{s_icon} {step.get('status','')}</td>
+                <td style="padding:10px;border:1px solid #d1d5db">{step.get('name','')}</td>
+                <td style="padding:10px;border:1px solid #d1d5db">{step.get('reason','')}</td>
             </tr>
             """
     else:
@@ -33,32 +33,35 @@ def send_report(status, video_path, log_lines, step_results, duration):
 
     html = f"""
     <html>
-    <body style="font-family:Arial">
-
-    <h2>RocketPlus Automation Report</h2>
-
-    <h3>Status: {status}</h3>
-    <h3>Duration: {duration}</h3>
-
-    <h3>Step Results</h3>
-    <table border="1" style="border-collapse:collapse;width:100%">
-        <tr>
-            <th>Step</th>
-            <th>Status</th>
-            <th>Name</th>
-            <th>Reason</th>
-        </tr>
-        {step_rows}
-    </table>
-
-    <h3>Execution Logs</h3>
-    <pre style="background:#111;color:#0f0;padding:10px">
-{log_html}
-    </pre>
-
-    <h3>Recording</h3>
-    <p>{video_path if video_path else "No recording found"}</p>
-
+    <body style="margin:0;background:#f4f6f8;font-family:Arial,sans-serif;color:#111827">
+        <div style="max-width:1080px;margin:0 auto;padding:20px">
+            <div style="background:#ffffff;border:1px solid #e5e7eb">
+                <div style="background:#1f3f68;color:#ffffff;padding:22px 24px">
+                    <div style="font-size:22px;font-weight:700">RocketPlus Automation Report</div>
+                    <div style="font-size:13px;margin-top:6px">Generated: {now} | Duration: {duration}</div>
+                </div>
+                <div style="padding:18px 24px 24px">
+                    <div style="font-size:14px;font-weight:700;margin-bottom:14px">
+                        Test Execution:
+                        <span style="background:{'#dcfce7' if status == 'PASS' else '#fee2e2'};color:{color};padding:7px 18px;border-radius:5px">{status}</span>
+                    </div>
+                    <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:16px">
+                        <thead>
+                            <tr style="background:#344153;color:#ffffff;text-align:left">
+                                <th style="padding:10px;border:1px solid #4b5563">Step</th>
+                                <th style="padding:10px;border:1px solid #4b5563">Status</th>
+                                <th style="padding:10px;border:1px solid #4b5563">Name</th>
+                                <th style="padding:10px;border:1px solid #4b5563">Reason</th>
+                            </tr>
+                        </thead>
+                        <tbody>{step_rows}</tbody>
+                    </table>
+                    <div style="font-size:13px;color:#374151;margin-bottom:10px"><b>Recording:</b> {video_path if video_path else "No recording found"}</div>
+                    <div style="font-size:13px;font-weight:700;margin:14px 0 6px">Execution Logs</div>
+                    <pre style="background:#111827;color:#d1fae5;padding:12px;white-space:pre-wrap;font-size:12px;line-height:1.4">{log_html}</pre>
+                </div>
+            </div>
+        </div>
     </body>
     </html>
     """
@@ -87,8 +90,9 @@ def send_report(status, video_path, log_lines, step_results, duration):
 
     # SEND MAIL
     try:
-        server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
-        server.login(EMAIL_REPORT["sender"], EMAIL_REPORT["password"])
+        server = smtplib.SMTP_SSL(EMAIL_REPORT["smtp_server"], EMAIL_REPORT["smtp_port"])
+        smtp_username = EMAIL_REPORT.get("username", EMAIL_REPORT["sender"])
+        server.login(smtp_username, EMAIL_REPORT["password"])
         server.sendmail(EMAIL_REPORT["sender"], receivers, msg.as_string())
         server.quit()
         print("Mail sent successfully")

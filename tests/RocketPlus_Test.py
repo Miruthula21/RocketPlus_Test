@@ -27,7 +27,7 @@ def run_step(step_num, step_name, action):
 
 class TestRocketPlus:
     def test_rocketplus_flow(self, playwright):
-        browser = playwright.chromium.launch(headless=True)
+        browser = playwright.chromium.launch(headless=False)
         video_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "videos")
         os.makedirs(video_dir, exist_ok=True)
         context = browser.new_context(
