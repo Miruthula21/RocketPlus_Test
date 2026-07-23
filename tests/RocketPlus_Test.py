@@ -104,23 +104,57 @@ class TestRocketPlus:
                 page.wait_for_timeout(3000)
             run_step(6, "Click Submit Button", step6)
 
-            # ── STEP 7: Click Login with PIN ───────────────
+            # STEP 7: Click Send OTP
             def step7():
-                page.locator("//a[contains(text(),'Login with PIN')]").click()
-                page.wait_for_timeout(2000)
-            run_step(7, "Click Login with PIN", step7)
+                send_otp_locators = [
+                    "#sendOTP",
+                    "#sendOtp",
+                    "#send_otp",
+                    "button:has-text('Send OTP')",
+                    "a:has-text('Send OTP')",
+                    "input[value='Send OTP']",
+                    "//*[contains(text(),'Send OTP')]",
+                ]
+                for loc in send_otp_locators:
+                    try:
+                        btn = page.locator(loc).first
+                        if btn.is_visible(timeout=3000):
+                            btn.click()
+                            print(f" Send OTP clicked using: {loc}")
+                            page.wait_for_timeout(10000)
+                            return
+                    except:
+                        continue
+                raise Exception("Send OTP button not found!")
+            run_step(7, "Click Send OTP and wait for manual OTP entry", step7)
 
-            # ── STEP 8: Enter PIN ──────────────────────────
+            # STEP 8: Submit OTP
             def step8():
-                page.locator("#efirstPin").fill(ROCKET_PIN)
-                page.wait_for_timeout(1000)
-            run_step(8, "Enter PIN", step8)
-
-            # ── STEP 9: Click Submit PIN ───────────────────
-            def step9():
-                page.locator("#pinScreen").click()
-                page.wait_for_timeout(3000)
-            run_step(9, "Click Submit PIN", step9)
+                submit_otp_locators = [
+                    "#otpScreen",
+                    "#verifyOTP",
+                    "#verifyOtp",
+                    "#validateOTP",
+                    "#validateOtp",
+                    "button:has-text('Submit')",
+                    "button:has-text('Verify')",
+                    "button:has-text('Login')",
+                    "input[value='Submit']",
+                    "input[value='Verify']",
+                    "input[value='Login']",
+                ]
+                for loc in submit_otp_locators:
+                    try:
+                        btn = page.locator(loc).first
+                        if btn.is_visible(timeout=3000):
+                            btn.click()
+                            print(f" OTP submitted using: {loc}")
+                            page.wait_for_timeout(3000)
+                            return
+                    except:
+                        continue
+                raise Exception("OTP submit/verify button not found after manual entry!")
+            run_step(8, "Submit manually entered OTP", step8)
 
             # ── STEP 10: Click Agree Popup ─────────────────
             def step10():

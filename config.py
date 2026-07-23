@@ -4,7 +4,7 @@
 
 ROCKET_URL      = "https://rocketplus.tradeplusonline.com/#!/app"
 ROCKET_UCC      = "91765395"
-ROCKET_PASSWORD = "Trade@1602"
+ROCKET_PASSWORD = "Navia@1234"
 ROCKET_PIN      = "123456"
 
 REKYC_PDF_FILE  = "IBSPM7684H_Esigned.pdf"
@@ -18,3 +18,4 @@ EMAIL_REPORT = {
     "smtp_server" : "smtp.zatpatmail.com",
     "smtp_port"   : 465
 }
+
